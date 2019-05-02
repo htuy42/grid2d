@@ -1,0 +1,5 @@
+// basic etchasketch
+
+//    val overrides = listOf<KotlinModule>()
+//    val injector = Guice.createInjector(Modules.override(BasicModule(), BasicGraphicsModule(), BasicUIModule(), BasicGridModule()).with(overrides))
+//    val engine = injector.getInstance(UserEngineImpl::class.java)
