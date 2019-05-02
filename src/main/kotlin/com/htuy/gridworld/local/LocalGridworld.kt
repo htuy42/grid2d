@@ -4,7 +4,9 @@ import com.google.common.collect.HashMultimap
 import com.google.common.collect.Multimap
 import com.google.common.collect.Multimaps.synchronizedMultimap
 import com.google.inject.Inject
+import com.htuy.Point
 import com.htuy.event.GridEvent
+import com.htuy.griddraw.Drawable
 import com.htuy.gridmain.KillSwitch
 import com.htuy.gridworld.GridWorld
 import com.htuy.gridworld.GridWorldBlock
@@ -56,6 +58,12 @@ class LocalGridWorld @Inject constructor(val initializer : BlockInitializer, val
         override fun getCellByAddress(address: CellAddress): GridWorldCell {
             return getBlockByHyperpoint(address.blockAddress).getCell(address)
         }
+    }
+
+    override fun getDrawablesAtCell(x: Int, y: Int): Collection<Drawable> {
+        val point = CellAddress.fromFlatPoint(Point(x,y))
+        val block = blocks[point.blockAddress] ?: return listOf()
+        return block.holder.getAllAtCellCopied(point.cellLocation)
     }
 
     private val fetcher : LocalFetcher by lazy{LocalFetcher()}

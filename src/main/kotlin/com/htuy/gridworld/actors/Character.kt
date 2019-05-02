@@ -1,13 +1,13 @@
 package com.htuy.gridworld.actors
 
 import com.htuy.Point
+import com.htuy.griddraw.Drawable
 import com.htuy.gridworld.GridWorldBlock
 import com.htuy.gridworld.locations.CellAddress
 import java.util.*
 
-interface Character : GridWorldActor{
+interface Character : GridWorldActor, Drawable{
     var locationInBlock : Point
-
 }
 
 abstract class AbstractCharacter(override val id: UUID = UUID.randomUUID()) : Character{

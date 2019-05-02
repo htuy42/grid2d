@@ -52,4 +52,6 @@ interface ActorHolder : Serializable {
      * Get all characters in the given rectangle
      */
     fun getAllInRectangle(rect : Rectangle) : Collection<Character>
+
+    fun getAllAtCellCopied(cell : Point) : Collection<Character>
 }

@@ -11,7 +11,7 @@ interface GridProvider{
     fun getCell(point : Point) : Cell{
         return getCell(point.x,point.y)
     }
-    fun getCellDrawables(x : Int, y : Int) : List<Drawable>
+    fun getCellDrawables(x : Int, y : Int) : Collection<Drawable>
     fun provideEventStream(stream : BlockingQueue<GridEvent>)
     // start the grid provider. May return, but should not be expected to. To end this and force it to return, stop should
     // be called
