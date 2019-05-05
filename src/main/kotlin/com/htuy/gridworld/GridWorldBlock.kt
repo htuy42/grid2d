@@ -10,9 +10,11 @@ import com.htuy.gridworld.locations.CellAddress
 import com.htuy.gridworld.locations.HyperPoint
 import com.sbf.eventengine.EventEngine
 import com.sbf.eventengine.EventEngineImpl
+import com.sbf.eventengine.eventobjects.ComplicatedEvent
 import com.sbf.eventengine.eventobjects.StateMachine
 import java.io.Serializable
 import java.lang.IllegalArgumentException
+import java.lang.IllegalStateException
 
 val ThreadsEngine: ThreadLocal<EventEngine<GridWorldBlock>> =
     ThreadLocal.withInitial { EventEngineImpl<GridWorldBlock>() }
@@ -50,6 +52,19 @@ class GridWorldBlock(val ownLocation : HyperPoint, cells : List<List<GridWorldCe
 
     fun worldGridToInternalGrid(point: Point): Point {
         return Point(point.x % BLOCK_SIDE_SIZE, point.y % BLOCK_SIDE_SIZE)
+    }
+
+
+    /**
+     * Receive an event that was created during processing but was decided not to be processed.
+     * This in practice means that the even should be exported. There are currently no other acceptable
+     * reasons for an event to flag itself as to be dumped
+     */
+    override fun dumpEventTo(event: ComplicatedEvent<GridWorldBlock>) {
+        if(event !is GridWorldEvent){
+            throw IllegalStateException("Only know how to deal with GridWorldEvents. Where did this come from?")
+        }
+        addOutboundEvents(listOf(event))
     }
 
     /**

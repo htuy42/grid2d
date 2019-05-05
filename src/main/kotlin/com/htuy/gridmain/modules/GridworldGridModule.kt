@@ -15,7 +15,7 @@ import com.htuy.gridworld.local.LocalGridWorld
 
 open class GridworldGridModule : KotlinModule(){
     override fun configure() {
-        val initializer = GridWorldCyclingCellInitializer(listOf(Material.WATER))
+        val initializer = GridWorldCyclingCellInitializer(listOf(Material.WATER, Material.EARTH))
         bind<SimpleCellInitializer>().toInstance(initializer)
         bind<BlockInitializer>().to<CellInitializingBlockInitializer>()
         bind<LocalGridWorld>().`in`<Singleton>()

@@ -13,7 +13,7 @@ import com.sbf.eventengine.eventobjects.StateMachine
  */
 open class SpawnEvent(override val fromCell: CellAddress, override val toCell: CellAddress, val toSpawn: Character) :
     AbstractCellTargetedEvent() {
-    override fun apply(to: StateMachine<GridWorldBlock>) {
+    override fun applyNoRes(to: StateMachine<GridWorldBlock>) {
         to.machine.holder.addActor(toSpawn)
     }
 }

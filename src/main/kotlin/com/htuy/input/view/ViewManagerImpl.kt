@@ -68,10 +68,6 @@ class ViewManagerImpl @Inject constructor(config: MainConfig) : ViewManager {
         } else {
             screenHeight / scale - (point.y / scale - y)
         }
-
-        if (x < 0 && y < 0) {
-            println("$point,$resultX,$resultY,$y,$scale,$screenHeight")
-        }
         return Point(resultX, resultY - 1)
     }
 

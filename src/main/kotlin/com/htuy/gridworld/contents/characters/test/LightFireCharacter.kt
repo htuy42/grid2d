@@ -26,25 +26,21 @@ class LightFireCharacter(override var locationInBlock: Point) : AbstractCharacte
 
 
     // it performs an action once a second
-    private var nextAction = System.currentTimeMillis() + 400
+    private var nextAction = System.currentTimeMillis() + 100
 
     override fun tick(block: GridWorldBlock): List<GridWorldEvent> {
         // if it is time to produce stuff and move
         if (System.currentTimeMillis() > nextAction) {
-            nextAction = System.currentTimeMillis() + 400
+            nextAction = System.currentTimeMillis() + 100
             val dir = Direction.random()
-            var loc = dir.applyTo(locationInBlock)
-            if (loc.x < 0 || loc.y < 0 || loc.x >= BLOCK_SIDE_SIZE || loc.y >= BLOCK_SIDE_SIZE) {
-                loc = locationInBlock
-            }
-            val goTo = CellAddress(block.ownLocation, loc)
+            val loc = dir.applyTo(CellAddress(block.ownLocation,locationInBlock))
             return listOf(
                 ChangeCellMaterialEvent(
                     getOwnLocation(block),
                     getOwnLocation(block),
                     Material.FIRE
                 ),
-                MoveCharacterEvent(getOwnLocation(block), goTo, this)
+                MoveCharacterEvent.makeMoveEvent(getOwnLocation(block),loc,this,true)
             )
         } else {
             return listOf()
