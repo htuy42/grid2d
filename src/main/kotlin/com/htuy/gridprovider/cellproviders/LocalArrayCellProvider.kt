@@ -3,6 +3,9 @@ package com.htuy.gridprovider.cellproviders
 import com.htuy.cell.Cell
 import com.htuy.gridprovider.initializer.CellInitializer
 
+/**
+ * Provide cells from a fixed 2d array
+ */
 class LocalArrayCellProvider(val size : Int, val initializer : CellInitializer) : CellProvider {
     val cells = Array(size){x ->
         Array(size){y ->

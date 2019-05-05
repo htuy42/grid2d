@@ -15,6 +15,10 @@ import org.lwjgl.opengl.DisplayMode
 import org.lwjgl.opengl.GL11
 import org.newdawn.slick.Graphics
 
+/**
+ * Simple render engine using lwjgl (+ slick) to draw stuff.
+ * There seem to be some issues with the slick bit, probably because we are only using it sometimes.
+ */
 class LwjglSimpleRenderer @Inject constructor(
     val config: MainConfig,
     renderSuite: RenderSuite,

@@ -9,6 +9,9 @@ import com.htuy.gridprovider.initializer.CellInitializer
 import com.htuy.gridprovider.initializer.CyclingCellInitializer
 import com.htuy.gridworld.contents.Material
 
+/**
+ * Basic collection of grid providing items
+ */
 open class BasicGridModule : KotlinModule(){
     override fun configure() {
         val initializer = CyclingCellInitializer(listOf(Material.FIRE, Material.WATER, Material.EARTH))

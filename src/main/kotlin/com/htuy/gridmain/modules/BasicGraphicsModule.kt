@@ -7,12 +7,12 @@ import com.htuy.griddraw.renderers.cell.implementations.material.MaterialColorMa
 import com.htuy.griddraw.renderers.cell.suites.MaterialCellsBorderSuite
 import com.htuy.griddraw.renderers.cell.suites.RenderSuite
 
+/**
+ * Basic collection of graphics controls
+ */
 class BasicGraphicsModule : KotlinModule() {
-
-
     override fun configure() {
         bind<RenderSuite>().to<MaterialCellsBorderSuite>()
         bind<MaterialColorMapper>().to<BasicMaterialColorMapper>()
     }
-
 }

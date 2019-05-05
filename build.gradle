@@ -24,6 +24,7 @@ dependencies {
     compile 'com.google.guava:guava:27.1-jre'
     compile 'nl.komponents.kovenant:kovenant:3.3.0'
     compile group: 'org.slick2d', name: 'slick2d-core', version: '1.0.2'
+    testImplementation "io.mockk:mockk:1.8.13"
 }
 
 compileKotlin {

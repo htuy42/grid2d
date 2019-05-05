@@ -11,16 +11,18 @@ import com.htuy.gridworld.events.user.UserEventStreamProcessor
 import com.htuy.gridworld.initializers.BlockInitializer
 import com.htuy.gridworld.initializers.CellInitializingBlockInitializer
 import com.htuy.gridworld.initializers.GridWorldCyclingCellInitializer
+import com.htuy.gridworld.initializers.GridWorldGridCellInitializer
+import com.htuy.gridworld.local.FakeRemote
 import com.htuy.gridworld.local.LocalGridWorld
 
 open class GridworldGridModule : KotlinModule(){
     override fun configure() {
-        val initializer = GridWorldCyclingCellInitializer(listOf(Material.WATER, Material.EARTH))
+        val initializer = GridWorldGridCellInitializer(Material.FIRE,Material.EARTH,Material.WATER)
         bind<SimpleCellInitializer>().toInstance(initializer)
         bind<BlockInitializer>().to<CellInitializingBlockInitializer>()
-        bind<LocalGridWorld>().`in`<Singleton>()
-        bind<CellProvider>().to<LocalGridWorld>()
-        bind<EventStreamHandler>().to<LocalGridWorld>()
+        bind<FakeRemote>().`in`<Singleton>()
+        bind<CellProvider>().to<FakeRemote>()
+        bind<EventStreamHandler>().to<FakeRemote>()
         bind<UserEventStreamProcessor>().to<TestUserEventStreamProcessor>()
     }
 }

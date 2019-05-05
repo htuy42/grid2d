@@ -12,6 +12,10 @@ import java.util.concurrent.BlockingQueue
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.thread
 
+/**
+ * Permanently listen on the given stream until killSwitch is triggered.
+ * While listening, treat f as turning selected cell to fire, w to water, and e to earth
+ */
 class CycleCellEventStreamHandler @Inject constructor(val killSwitch: KillSwitch, val provider: CellProvider) :
     EventStreamHandler {
     override fun processStream(stream: BlockingQueue<GridEvent>) {

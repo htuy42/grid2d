@@ -15,6 +15,4 @@ class BasicMaterialRenderer @Inject constructor(val materialColorMapper : Materi
         val color = materialColorMapper.materialToColor(cell.material)
         drawSquare(atX, atY, scale, color)
     }
-
-
 }

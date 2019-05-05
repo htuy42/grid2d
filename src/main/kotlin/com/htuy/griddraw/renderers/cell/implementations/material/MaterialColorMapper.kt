@@ -18,9 +18,6 @@ interface MaterialColorMapper{
  */
 class BasicMaterialColorMapper @Inject constructor(val config : ColorsConfig) :
     MaterialColorMapper {
-    val blueWater = Color(64, 164, 223)
-    val redFire = Color(226, 88, 34)
-    val brownEarth = Color(225, 169, 95)
     override fun materialToColor(material: Material): Color {
         return when(material){
             Material.WATER -> config.waterColor
