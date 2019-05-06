@@ -23,6 +23,8 @@ open class GridworldGridModule : KotlinModule(){
         bind<SimpleCellInitializer>().toInstance(initializer)
         bind<BlockInitializer>().to<CellInitializingBlockInitializer>()
         bind<FakeRemote>().`in`<Singleton>()
+        bind<LocalGridWorld>().`in`<Singleton>()
+
         bind<GridWorld>().to<FakeRemote>()
         bind<CellProvider>().to<CacheGridworldProvider>()
         bind<EventStreamHandler>().to<FakeRemote>()

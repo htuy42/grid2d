@@ -5,6 +5,8 @@ import com.google.common.cache.CacheBuilder
 import com.google.inject.Inject
 import com.htuy.Point
 import com.htuy.cell.Cell
+import com.htuy.common.SystemUtilies
+import com.htuy.concurrent.TimeoutMap
 import com.htuy.griddraw.Drawable
 import com.htuy.gridprovider.cellproviders.CellProvider
 import com.htuy.gridworld.GridWorld
@@ -16,17 +18,22 @@ import com.htuy.gridworld.locations.HyperPoint
 import kotlinx.coroutines.experimental.launch
 import java.util.concurrent.ConcurrentHashMap
 
+
+// todo framerate on cache refresh
+
 class CacheGridworldProvider @Inject constructor(val world : GridWorld): CellProvider{
 
     val outRequests = ConcurrentHashMap<HyperPoint,Boolean>()
 
-    val cachedBlocks = CacheBuilder.newBuilder().concurrencyLevel(4).build<HyperPoint,GridWorldBlock>()
+    val cachedBlocks = CacheBuilder.newBuilder().concurrencyLevel(4).maximumSize(200).build<HyperPoint,GridWorldBlock>()
+
+    val updateTime = ConcurrentHashMap<HyperPoint,Long>()
 
     fun remoteGetBlock(location : HyperPoint){
-        if(location !in outRequests){
+        if(!outRequests.containsKey(location)){
             var did = false
             synchronized(outRequests){
-                if(location !in outRequests){
+                if(!outRequests.containsKey(location)){
                     did = true
                     outRequests.put(location,true)
                 }
@@ -35,6 +42,7 @@ class CacheGridworldProvider @Inject constructor(val world : GridWorld): CellPro
                 launch {
                     val block = world.getFetcher().getBlockByHyperpoint(location)
                     cachedBlocks.put(location,block)
+//                    updateTime.put(location,System.currentTimeMillis() + 65)
                     outRequests.remove(location)
                 }
             }

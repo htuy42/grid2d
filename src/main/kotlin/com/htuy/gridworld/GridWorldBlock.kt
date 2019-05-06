@@ -2,6 +2,7 @@ package com.htuy.gridworld
 
 import com.google.common.collect.HashMultimap
 import com.htuy.Point
+import com.htuy.common.ObjectSerializer
 import com.htuy.gridworld.actors.ActorHolder
 import com.htuy.gridworld.actors.MultimapActorHolder
 import com.htuy.gridworld.actors.GridWorldActor
@@ -23,6 +24,18 @@ class GridWorldBlock(val ownLocation : HyperPoint, cells : List<List<GridWorldCe
 
     val holder: ActorHolder = MultimapActorHolder()
 
+    var maybeCopied : Boolean = false
+
+    private var serialStore : ByteArray = ObjectSerializer.objectToBytes(this)
+
+    fun getCopy() : GridWorldBlock{
+        synchronized(serialStore){
+            return ObjectSerializer.bytesToObject(serialStore) as GridWorldBlock
+        }
+    }
+
+
+
     // reference is useful for things that take in a machine of type t rather than an actual t
     @Transient
     override val machine: GridWorldBlock = this
@@ -31,7 +44,7 @@ class GridWorldBlock(val ownLocation : HyperPoint, cells : List<List<GridWorldCe
         return holder.getAll()
     }
 
-    private val internalCells: ArrayList<ArrayList<GridWorldCell>> = arrayListOf()
+    internal val internalCells: ArrayList<ArrayList<GridWorldCell>> = arrayListOf()
 
     init{
         if(cells.size != BLOCK_SIDE_SIZE || cells[0].size != BLOCK_SIDE_SIZE){
@@ -89,6 +102,10 @@ class GridWorldBlock(val ownLocation : HyperPoint, cells : List<List<GridWorldCe
         addOutboundEvents(allProducedEvents.second)
         for (elt in allProducedEvents.first) {
             engine.addEvent(elt)
+        }
+        synchronized(serialStore) {
+            serialStore = ObjectSerializer.objectToBytes(this)
+            maybeCopied = true
         }
         return outboundMessages
     }

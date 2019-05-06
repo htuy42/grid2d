@@ -34,13 +34,12 @@ class FakeRemote @Inject constructor(
         return object : LocationFetcher {
             override suspend fun getBlockByHyperpoint(hyperPoint: HyperPoint): GridWorldBlock {
                 delay(100)
-                return ObjectSerializer.bytesToObject(
-                    ObjectSerializer.objectToBytes(
-                       inner.getFetcher().getBlockByHyperpoint(
-                            hyperPoint
-                        )
-                    )
-                ) as GridWorldBlock
+                val fetched = inner.getFetcher().getBlockByHyperpoint(hyperPoint)
+                if(fetched.maybeCopied) {
+                    return fetched.getCopy()
+                } else {
+                    return getBlockByHyperpoint(hyperPoint)
+                }
             }
 
             override suspend fun getCellByAddress(address: CellAddress): GridWorldCell {
@@ -65,7 +64,7 @@ class FakeRemote @Inject constructor(
 
     override fun getCell(x: Int, y: Int): Cell {
         Thread.sleep(10)
-        return inner.getCell(x,y)
+        return inner.getCell(x, y)
     }
 
     override fun getDrawablesAtCell(x: Int, y: Int): Collection<Drawable> {
