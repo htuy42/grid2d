@@ -1,9 +1,10 @@
 package com.htuy.util
 
+import java.io.Serializable
 import java.util.*
 
 
-data class Color(val r : Float, val g : Float, val b : Float){
+data class Color(val r : Float, val g : Float, val b : Float) : Serializable{
     fun toSlickColor(): org.newdawn.slick.Color {
         return org.newdawn.slick.Color(r,g,b)
     }

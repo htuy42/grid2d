@@ -2,8 +2,9 @@ package com.htuy.gridworld.locations
 
 import com.htuy.Point
 import com.htuy.gridworld.BLOCK_SIDE_SIZE
+import java.io.Serializable
 
-data class HyperPoint(val scale : Int, val internalPoint : Point){
+data class HyperPoint(val scale : Int, val internalPoint : Point) : Serializable{
     companion object {
         /**
          * Make a hyperpoint from a flat point

@@ -5,6 +5,8 @@ import com.google.inject.Singleton
 import com.htuy.gridprovider.EventStreamHandler
 import com.htuy.gridprovider.cellproviders.CellProvider
 import com.htuy.gridprovider.initializer.SimpleCellInitializer
+import com.htuy.gridworld.GridWorld
+import com.htuy.gridworld.cache.CacheGridworldProvider
 import com.htuy.gridworld.contents.Material
 import com.htuy.gridworld.events.user.TestUserEventStreamProcessor
 import com.htuy.gridworld.events.user.UserEventStreamProcessor
@@ -21,7 +23,8 @@ open class GridworldGridModule : KotlinModule(){
         bind<SimpleCellInitializer>().toInstance(initializer)
         bind<BlockInitializer>().to<CellInitializingBlockInitializer>()
         bind<FakeRemote>().`in`<Singleton>()
-        bind<CellProvider>().to<FakeRemote>()
+        bind<GridWorld>().to<FakeRemote>()
+        bind<CellProvider>().to<CacheGridworldProvider>()
         bind<EventStreamHandler>().to<FakeRemote>()
         bind<UserEventStreamProcessor>().to<TestUserEventStreamProcessor>()
     }

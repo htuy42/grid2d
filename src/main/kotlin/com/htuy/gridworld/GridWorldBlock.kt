@@ -19,7 +19,7 @@ import java.lang.IllegalStateException
 val ThreadsEngine: ThreadLocal<EventEngine<GridWorldBlock>> =
     ThreadLocal.withInitial { EventEngineImpl<GridWorldBlock>() }
 
-class GridWorldBlock(val ownLocation : HyperPoint, cells : List<List<GridWorldCell>>) : Serializable, StateMachine<GridWorldBlock> {
+class GridWorldBlock(val ownLocation : HyperPoint, cells : List<List<GridWorldCell>>, var generation : Long) : Serializable, StateMachine<GridWorldBlock> {
 
     val holder: ActorHolder = MultimapActorHolder()
 

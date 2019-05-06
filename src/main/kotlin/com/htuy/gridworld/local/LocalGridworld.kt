@@ -24,13 +24,21 @@ import java.util.concurrent.atomic.AtomicInteger
 import kotlin.collections.ArrayList
 import kotlin.concurrent.thread
 
-class LocalGridWorld @Inject constructor(val initializer : BlockInitializer, val killSwitch: KillSwitch, val streamHandler : UserEventStreamProcessor) : GridWorld {
+class LocalGridWorld @Inject constructor(
+    val initializer: BlockInitializer,
+    val killSwitch: KillSwitch,
+    val streamHandler: UserEventStreamProcessor
+) : GridWorld {
+    private var generation : Long = 0
+    override fun getGeneration(): Long {
+        return generation
+    }
 
     override fun processStream(stream: BlockingQueue<GridEvent>) {
-        thread{
-            while(!killSwitch.getIsDead()){
+        thread {
+            while (!killSwitch.getIsDead()) {
                 val item = streamHandler.process(stream.take())
-                if(item != null) {
+                if (item != null) {
                     synchronized(userItemsForTick) {
                         userItemsForTick.add(item)
                     }
@@ -41,32 +49,35 @@ class LocalGridWorld @Inject constructor(val initializer : BlockInitializer, val
 
     val userItemsForTick = ArrayList<GridWorldEvent>()
 
-    inner class LocalFetcher : LocationFetcher{
-        override fun getBlockByHyperpoint(hyperPoint: HyperPoint): GridWorldBlock {
-            if(hyperPoint !in blocks){
-                synchronized(blocks){
-                    if(hyperPoint !in blocks){
-                        blocks[hyperPoint] = initializer.makeNewBlock(this,hyperPoint)
+    inner class LocalFetcher : LocationFetcher {
+        override suspend fun getBlockByHyperpoint(hyperPoint: HyperPoint): GridWorldBlock {
+            if (hyperPoint !in blocks) {
+                synchronized(blocks) {
+                    if (hyperPoint !in blocks) {
+                        blocks[hyperPoint] = initializer.makeNewBlock(this, hyperPoint)
                     }
                 }
             }
             return blocks[hyperPoint]!!
         }
-        override fun getBlockByHyperpointInit(hyperPoint: HyperPoint): GridWorldBlock? {
+
+        override suspend fun getBlockByHyperpointInit(hyperPoint: HyperPoint): GridWorldBlock? {
             return blocks[hyperPoint]
         }
-        override fun getCellByAddress(address: CellAddress): GridWorldCell {
+
+        override suspend fun getCellByAddress(address: CellAddress): GridWorldCell {
             return getBlockByHyperpoint(address.blockAddress).getCell(address)
         }
     }
 
     override fun getDrawablesAtCell(x: Int, y: Int): Collection<Drawable> {
-        val point = CellAddress.fromFlatPoint(Point(x,y))
+        val point = CellAddress.fromFlatPoint(Point(x, y))
         val block = blocks[point.blockAddress] ?: return listOf()
         return block.holder.getAllAtCellCopied(point.cellLocation)
     }
 
-    private val fetcher : LocalFetcher by lazy{LocalFetcher()}
+
+    private val fetcher: LocalFetcher by lazy { LocalFetcher() }
 
     override fun getFetcher(): LocationFetcher {
         return fetcher
@@ -75,40 +86,40 @@ class LocalGridWorld @Inject constructor(val initializer : BlockInitializer, val
     val blocks: ConcurrentMap<HyperPoint, GridWorldBlock> = ConcurrentHashMap<HyperPoint, GridWorldBlock>()
 
     // the block messages to be used next tick
-    var nextTicksBlockMessages : Multimap<HyperPoint, GridWorldEvent> = HashMultimap.create()
+    var nextTicksBlockMessages: Multimap<HyperPoint, GridWorldEvent> = HashMultimap.create()
 
 
     override fun start() {
         val executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() - 2)
         // how we will keep track of whether we are done
         val i = AtomicInteger(0)
-        while(!killSwitch.getIsDead()){
+        while (!killSwitch.getIsDead()) {
             // synchronously get the userItems list and clear it for future additions
-            val itemsFromUser = synchronized(userItemsForTick){
+            val itemsFromUser = synchronized(userItemsForTick) {
                 val lst = ArrayList(userItemsForTick)
                 userItemsForTick.clear()
                 lst
             }
             itemsFromUser.forEach {
-                nextTicksBlockMessages.put(it.to,it)
+                nextTicksBlockMessages.put(it.to, it)
             }
             // fetch all the blocks that exist at the beginning. More might be added, but we will not tick them until next time
             val allBlocks = synchronized(blocks) {
-                 LinkedBlockingQueue(blocks.values)
+                LinkedBlockingQueue(blocks.values)
             }
-            if(allBlocks.size == 0){
+            if (allBlocks.size == 0) {
                 Thread.sleep(100)
                 continue
             }
-            val def = deferred<Boolean,Exception>()
+            val def = deferred<Boolean, Exception>()
             // there will be allBlocks.size tasks to fulfill
             i.set(allBlocks.size)
             val thisTicksBlockMessages = nextTicksBlockMessages
             nextTicksBlockMessages = HashMultimap.create()
             // use a safe view on it for concurrent writing
             val safeNextBlockMessages = synchronizedMultimap(nextTicksBlockMessages)
-            for(elt in allBlocks){
-                executor.submit{
+            for (elt in allBlocks) {
+                executor.submit {
                     // get the inbound messages for this block. Safe to do concurrent because we only
                     // ever read from this, never write to it
                     try {
@@ -118,16 +129,18 @@ class LocalGridWorld @Inject constructor(val initializer : BlockInitializer, val
                         // store the outbound messages for next tick
                         safeNextBlockMessages.putAll(outbound)
                         // if we decrement i to 0, we are done and so is every other one
-                    } catch(e : Exception){
+                    } catch (e: Exception) {
                         e.printStackTrace()
                     }
-                    if(i.decrementAndGet() == 0){
+                    elt.generation = generation + 1
+                    if (i.decrementAndGet() == 0) {
                         def.resolve(true)
                     }
                 }
             }
             // wait till we have finished all of them. A makeshift barrier
             def.promise.get()
+            generation += 1
         }
     }
 }

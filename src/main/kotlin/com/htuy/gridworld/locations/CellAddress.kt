@@ -2,8 +2,9 @@ package com.htuy.gridworld.locations
 
 import com.htuy.Point
 import com.htuy.gridworld.BLOCK_SIDE_SIZE
+import java.io.Serializable
 
-data class CellAddress(val blockAddress: HyperPoint, val cellLocation: Point) {
+data class CellAddress(val blockAddress: HyperPoint, val cellLocation: Point) : Serializable {
     companion object {
         fun fromFlatPoint(flatPoint: Point, scale: Int = BLOCK_SIDE_SIZE) : CellAddress {
             val cellX = if(flatPoint.x >= 0){

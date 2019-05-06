@@ -21,6 +21,6 @@ class CellInitializingBlockInitializer @Inject constructor(val cellInit: SimpleC
                 val point = location.innerLocationToFlatPoint(Point(x,y))
                 cellInit.getNextCell(point.x,point.y) as GridWorldCell
             }
-        })
+        },0)
     }
 }

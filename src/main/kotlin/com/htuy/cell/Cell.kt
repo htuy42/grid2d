@@ -1,8 +1,9 @@
 package com.htuy.cell
 
 import com.htuy.gridworld.contents.Material
+import java.io.Serializable
 
-interface Cell{
+interface Cell : Serializable{
     var material : Material
 }
 

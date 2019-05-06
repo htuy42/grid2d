@@ -1,10 +1,11 @@
 package com.htuy
 
+import java.io.Serializable
 import java.lang.Integer.max
 import java.lang.Integer.min
 import java.lang.Math.abs
 
-data class Point(val x : Int, val y : Int){
+data class Point(val x : Int, val y : Int) : Serializable{
     fun delta(dx: Int, dy: Int): Point {
         return Point(x + dx, y + dy)
     }
@@ -29,7 +30,7 @@ data class Point(val x : Int, val y : Int){
 /**
  * A rectangle in 2space
  */
-data class Rectangle(val start : Point, val end : Point){
+data class Rectangle(val start : Point, val end : Point) : Serializable{
     private val initialX : Int by lazy { min(start.x,end.x)}
     private val initialY : Int by lazy{ min(start.y, end.y)}
     private val endX: Int by lazy { max(start.x,end.x)}

@@ -8,6 +8,9 @@ import com.htuy.griddraw.Drawable
  * of access by a rendering engine
  */
 interface CellProvider{
+    /**
+     * These functions may actually go to a remote, and therefore are marked as suspending
+     */
     fun getCell(x : Int, y : Int) : Cell
     fun getDrawablesAtCell(x : Int, y : Int) : Collection<Drawable>{
         return listOf()

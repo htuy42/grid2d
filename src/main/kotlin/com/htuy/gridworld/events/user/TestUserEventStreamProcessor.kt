@@ -12,11 +12,12 @@ class TestUserEventStreamProcessor : UserEventStreamProcessor {
     override fun process(event: GridEvent): GridWorldEvent? {
         if (event is CellKeyedEvent) {
             when (event.keyPressed) {
-                Keyboard.KEY_S -> return SpawnEvent(
+                Keyboard.KEY_S -> {
+                    return SpawnEvent(
                     CellAddress.fromFlatPoint(event.cellLocation),
                     CellAddress.fromFlatPoint(event.cellLocation),
                     LightFireCharacter(CellAddress.fromFlatPoint(event.cellLocation).cellLocation)
-                )
+                )}
             }
         }
         return null
