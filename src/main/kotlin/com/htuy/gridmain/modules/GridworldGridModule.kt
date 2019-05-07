@@ -25,9 +25,9 @@ open class GridworldGridModule : KotlinModule(){
         bind<FakeRemote>().`in`<Singleton>()
         bind<LocalGridWorld>().`in`<Singleton>()
 
-        bind<GridWorld>().to<FakeRemote>()
-        bind<CellProvider>().to<CacheGridworldProvider>()
-        bind<EventStreamHandler>().to<FakeRemote>()
+        bind<GridWorld>().to<LocalGridWorld>()
+        bind<CellProvider>().to<LocalGridWorld>()
+        bind<EventStreamHandler>().to<LocalGridWorld>()
         bind<UserEventStreamProcessor>().to<TestUserEventStreamProcessor>()
     }
 }

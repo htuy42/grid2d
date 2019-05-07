@@ -5,3 +5,5 @@ package com.htuy.gridworld
 val BLOCK_SIDE_SIZE = 10
 
 val WORLD_SIDE_SIZE_BLOCKS = 250
+
+val MAX_CACHE_UPDATE_FREQUENCY = 50
