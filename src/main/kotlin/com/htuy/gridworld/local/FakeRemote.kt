@@ -16,6 +16,7 @@ import com.htuy.gridworld.initializers.BlockInitializer
 import com.htuy.gridworld.locations.CellAddress
 import com.htuy.gridworld.locations.HyperPoint
 import com.htuy.gridworld.locations.LocationFetcher
+import com.htuy.statistics.StatisticsRecorder
 import kotlinx.coroutines.experimental.delay
 import java.util.concurrent.BlockingQueue
 
@@ -28,7 +29,8 @@ import java.util.concurrent.BlockingQueue
 class FakeRemote @Inject constructor(
     initializer: BlockInitializer,
     killSwitch: KillSwitch,
-    streamHandler: UserEventStreamProcessor
+    streamHandler: UserEventStreamProcessor,
+    recorder : StatisticsRecorder
 ) : GridWorld {
     override fun getFetcher(): LocationFetcher {
         return object : LocationFetcher {
@@ -76,7 +78,7 @@ class FakeRemote @Inject constructor(
         inner.processStream(stream)
     }
 
-    val inner: GridWorld = LocalGridWorld(initializer, killSwitch, streamHandler)
+    val inner: GridWorld = LocalGridWorld(initializer, killSwitch, streamHandler,recorder)
 
     override fun getGeneration(): Long {
         return inner.getGeneration()

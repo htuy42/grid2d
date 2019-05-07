@@ -8,6 +8,8 @@ import com.htuy.griddraw.renderers.cell.CellRenderers
 import com.htuy.griddraw.renderers.cell.suites.RenderSuite
 import com.htuy.gridprovider.GridProvider
 import com.htuy.input.view.View
+import com.htuy.statistics.RateStatistic
+import com.htuy.statistics.StatisticsRecorder
 import com.htuy.time.FrameTracker
 
 import org.lwjgl.opengl.Display
@@ -22,7 +24,8 @@ import org.newdawn.slick.Graphics
 class LwjglSimpleRenderer @Inject constructor(
     val config: MainConfig,
     renderSuite: RenderSuite,
-    val tracker: FrameTracker
+    val tracker: FrameTracker,
+    val recorder : StatisticsRecorder
 ) : GridRenderer {
 
     companion object {
@@ -74,7 +77,7 @@ class LwjglSimpleRenderer @Inject constructor(
         }
 
         cellRenderers.reset(true)
-
+        recorder.recordStat(RateStatistic("Frame Drawn",1))
         GL11.glEnd()
         Display.update()
     }

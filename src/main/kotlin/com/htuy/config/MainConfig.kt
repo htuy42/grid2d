@@ -5,5 +5,6 @@ data class MainConfig(
     val screenWidth: Int = 2500,
     val screenTitle: String = "Grid World",
     val defaultScale: Int = 50,
-    val fps: Int = 60
+    val fps: Int = 60,
+    val reportFrequency : Long = 5000
 )

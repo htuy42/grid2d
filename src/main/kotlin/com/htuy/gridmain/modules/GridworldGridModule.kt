@@ -21,13 +21,12 @@ open class GridworldGridModule : KotlinModule(){
     override fun configure() {
         val initializer = GridWorldGridCellInitializer(Material.FIRE,Material.EARTH,Material.WATER)
         bind<SimpleCellInitializer>().toInstance(initializer)
-        bind<BlockInitializer>().to<CellInitializingBlockInitializer>()
+        bind<BlockInitializer>().to<CellInitializingBlockInitializer>().`in`(Singleton::class.java)
         bind<FakeRemote>().`in`<Singleton>()
         bind<LocalGridWorld>().`in`<Singleton>()
-
-        bind<GridWorld>().to<LocalGridWorld>()
-        bind<CellProvider>().to<LocalGridWorld>()
-        bind<EventStreamHandler>().to<LocalGridWorld>()
-        bind<UserEventStreamProcessor>().to<TestUserEventStreamProcessor>()
+        bind<GridWorld>().to<LocalGridWorld>().`in`(Singleton::class.java)
+        bind<CellProvider>().to<LocalGridWorld>().`in`(Singleton::class.java)
+        bind<EventStreamHandler>().to<LocalGridWorld>().`in`(Singleton::class.java)
+        bind<UserEventStreamProcessor>().to<TestUserEventStreamProcessor>().`in`(Singleton::class.java)
     }
 }

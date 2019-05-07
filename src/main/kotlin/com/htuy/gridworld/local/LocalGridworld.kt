@@ -17,6 +17,8 @@ import com.htuy.gridworld.initializers.BlockInitializer
 import com.htuy.gridworld.locations.CellAddress
 import com.htuy.gridworld.locations.HyperPoint
 import com.htuy.gridworld.locations.LocationFetcher
+import com.htuy.statistics.RateStatistic
+import com.htuy.statistics.StatisticsRecorder
 import nl.komponents.kovenant.deferred
 import java.lang.Exception
 import java.util.concurrent.*
@@ -27,7 +29,8 @@ import kotlin.concurrent.thread
 class LocalGridWorld @Inject constructor(
     val initializer: BlockInitializer,
     val killSwitch: KillSwitch,
-    val streamHandler: UserEventStreamProcessor
+    val streamHandler: UserEventStreamProcessor,
+    val recorder : StatisticsRecorder
 ) : GridWorld {
     private var generation : Long = 0
     override fun getGeneration(): Long {
@@ -133,11 +136,13 @@ class LocalGridWorld @Inject constructor(
                         e.printStackTrace()
                     }
                     elt.generation = generation + 1
+                    recorder.recordStat(RateStatistic("Cell Processed",1))
                     if (i.decrementAndGet() == 0) {
                         def.resolve(true)
                     }
                 }
             }
+            recorder.recordStat(RateStatistic("Full Grid Processed",1))
             // wait till we have finished all of them. A makeshift barrier
             def.promise.get()
             generation += 1

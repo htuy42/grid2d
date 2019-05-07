@@ -1,6 +1,7 @@
 package com.htuy.gridmain.modules
 
 import com.authzee.kotlinguice4.KotlinModule
+import com.google.inject.Singleton
 import com.htuy.gridprovider.EventStreamHandler
 import com.htuy.gridprovider.cellproviders.CellProvider
 import com.htuy.gridprovider.cellproviders.LocalArrayCellProvider
@@ -17,6 +18,6 @@ open class BasicGridModule : KotlinModule(){
         val initializer = CyclingCellInitializer(listOf(Material.FIRE, Material.WATER, Material.EARTH))
         bind<CellInitializer>().toInstance(initializer)
         bind<CellProvider>().toInstance(LocalArrayCellProvider(5000, initializer))
-        bind<EventStreamHandler>().to<CycleCellEventStreamHandler>()
+        bind<EventStreamHandler>().to<CycleCellEventStreamHandler>().`in`(Singleton::class.java)
     }
 }

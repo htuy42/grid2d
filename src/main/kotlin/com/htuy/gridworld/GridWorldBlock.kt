@@ -103,10 +103,10 @@ class GridWorldBlock(val ownLocation : HyperPoint, cells : List<List<GridWorldCe
         for (elt in allProducedEvents.first) {
             engine.addEvent(elt)
         }
-        synchronized(serialStore) {
-            serialStore = ObjectSerializer.objectToBytes(this)
-            maybeCopied = true
-        }
+//        synchronized(serialStore) {
+//            serialStore = ObjectSerializer.objectToBytes(this)
+//            maybeCopied = true
+//        }
         return outboundMessages
     }
 

@@ -1,6 +1,7 @@
 package com.htuy.gridmain.modules
 
 import com.authzee.kotlinguice4.KotlinModule
+import com.google.inject.Singleton
 import com.htuy.config.InputConfig
 import com.htuy.input.inputsuites.BASIC_CLICK_DRAG_SELECTION_SUITE
 import com.htuy.input.inputsuites.BASIC_UI_CONTROL_SUITE
@@ -17,7 +18,7 @@ open class BasicUIModule : KotlinModule(){
 
     override fun configure() {
         bind<UICallbacks>().toInstance(callbacks)
-        bind<ViewManager>().to<ViewManagerImpl>()
+        bind<ViewManager>().to<ViewManagerImpl>().`in`(Singleton::class.java)
         bind<InputConfig>().toInstance(config)
     }
 }
