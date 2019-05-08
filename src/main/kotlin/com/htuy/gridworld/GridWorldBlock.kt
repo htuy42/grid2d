@@ -3,6 +3,7 @@ package com.htuy.gridworld
 import com.google.common.collect.HashMultimap
 import com.htuy.Point
 import com.htuy.common.ObjectSerializer
+import com.htuy.common.RegisteredSerial
 import com.htuy.gridworld.actors.ActorHolder
 import com.htuy.gridworld.actors.MultimapActorHolder
 import com.htuy.gridworld.actors.GridWorldActor
@@ -20,12 +21,14 @@ import java.lang.IllegalStateException
 val ThreadsEngine: ThreadLocal<EventEngine<GridWorldBlock>> =
     ThreadLocal.withInitial { EventEngineImpl<GridWorldBlock>() }
 
+@RegisteredSerial
 class GridWorldBlock(val ownLocation : HyperPoint, cells : List<List<GridWorldCell>>, var generation : Long) : Serializable, StateMachine<GridWorldBlock> {
 
     val holder: ActorHolder = MultimapActorHolder()
 
     var maybeCopied : Boolean = false
 
+    @Transient
     private var serialStore : ByteArray = ObjectSerializer.objectToBytes(this)
 
     fun getCopy() : GridWorldBlock{
@@ -103,10 +106,11 @@ class GridWorldBlock(val ownLocation : HyperPoint, cells : List<List<GridWorldCe
         for (elt in allProducedEvents.first) {
             engine.addEvent(elt)
         }
-//        synchronized(serialStore) {
-//            serialStore = ObjectSerializer.objectToBytes(this)
-//            maybeCopied = true
-//        }
+        synchronized(serialStore) {
+
+            serialStore = ObjectSerializer.fstObjToBytes(this)
+            maybeCopied = true
+        }
         return outboundMessages
     }
 

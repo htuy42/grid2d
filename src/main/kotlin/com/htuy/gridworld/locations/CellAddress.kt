@@ -1,9 +1,11 @@
 package com.htuy.gridworld.locations
 
 import com.htuy.Point
+import com.htuy.common.RegisteredSerial
 import com.htuy.gridworld.BLOCK_SIDE_SIZE
 import java.io.Serializable
 
+@RegisteredSerial
 data class CellAddress(val blockAddress: HyperPoint, val cellLocation: Point) : Serializable {
     companion object {
         fun fromFlatPoint(flatPoint: Point, scale: Int = BLOCK_SIDE_SIZE) : CellAddress {

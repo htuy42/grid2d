@@ -1,10 +1,12 @@
 package com.htuy
 
+import com.htuy.common.RegisteredSerial
 import java.io.Serializable
 import java.lang.Integer.max
 import java.lang.Integer.min
 import java.lang.Math.abs
 
+@RegisteredSerial
 data class Point(val x : Int, val y : Int) : Serializable{
     fun delta(dx: Int, dy: Int): Point {
         return Point(x + dx, y + dy)

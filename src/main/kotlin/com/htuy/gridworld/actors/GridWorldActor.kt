@@ -1,5 +1,7 @@
 package com.htuy.gridworld.actors
 
+import com.htuy.common.AbstractSerial
+import com.htuy.common.RegisteredSerial
 import com.htuy.gridworld.GridWorldBlock
 import com.htuy.gridworld.events.GridWorldEvent
 import com.sbf.eventengine.eventobjects.Action
@@ -7,6 +9,7 @@ import com.sbf.eventengine.eventobjects.Entity
 import com.sbf.eventengine.eventobjects.Event
 import java.io.Serializable
 
+@AbstractSerial
 interface GridWorldActor : Entity<GridWorldBlock>, Serializable {
     fun tick(block : GridWorldBlock) : List<GridWorldEvent>{
         return listOf()

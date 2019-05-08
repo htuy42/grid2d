@@ -3,9 +3,10 @@ package com.htuy.gridworld.actors
 import com.google.common.collect.HashMultimap
 import com.htuy.Point
 import com.htuy.Rectangle
+import com.htuy.common.RegisteredSerial
 import com.htuy.gridworld.BLOCK_SIDE_SIZE
 
-
+@RegisteredSerial
 class MultimapActorHolder : ActorHolder {
 
     // only our modifications and our external facing get (get all copied) need to be synchronized.

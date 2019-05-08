@@ -1,5 +1,6 @@
 package com.htuy.gridworld.actors
 
+import com.htuy.common.RegisteredSerial
 import com.htuy.gridworld.GridWorldBlock
 import com.sbf.eventengine.eventobjects.Entity
 import com.sbf.eventengine.eventobjects.Event

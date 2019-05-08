@@ -1,9 +1,11 @@
 package com.htuy.gridworld.locations
 
 import com.htuy.Point
+import com.htuy.common.RegisteredSerial
 import com.htuy.gridworld.BLOCK_SIDE_SIZE
 import java.io.Serializable
 
+@RegisteredSerial
 data class HyperPoint(val scale : Int, val internalPoint : Point) : Serializable{
     companion object {
         /**

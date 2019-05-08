@@ -1,6 +1,7 @@
 package com.htuy.gridworld.actors
 
 import com.htuy.Point
+import com.htuy.common.RegisteredSerial
 import com.htuy.griddraw.Drawable
 import com.htuy.gridworld.GridWorldBlock
 import com.htuy.gridworld.locations.CellAddress

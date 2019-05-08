@@ -1,12 +1,15 @@
 package com.htuy.gridworld.events
 
+import com.htuy.common.AbstractSerial
 import com.htuy.event.GridEvent
 import com.htuy.gridworld.GridWorldBlock
 import com.htuy.gridworld.locations.HyperPoint
 import com.sbf.eventengine.eventobjects.ComplicatedEvent
 import com.sbf.eventengine.eventobjects.Event
+import java.io.Serializable
 
-interface GridWorldEvent : GridEvent, ComplicatedEvent<GridWorldBlock> {
+@AbstractSerial
+interface GridWorldEvent : GridEvent, ComplicatedEvent<GridWorldBlock>, Serializable {
     val from : HyperPoint
     val to : HyperPoint
     /**
